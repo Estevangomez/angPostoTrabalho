@@ -1,3 +1,4 @@
+import { LoginService } from './../providers/login.service';
 import { Usuario } from './../interfaces/usuario';
 import { Linha } from './../interfaces/linha';
 import {FormControl, FormGroup, Validators,FormBuilder } from "@angular/forms";
@@ -24,17 +25,17 @@ export class ProdutoComponent implements OnInit {
   codlinha:any;
   private produtos:any = [];
   produto:any;
+  mostrarVoltar:boolean = false;
   existeprodutos:boolean = false;
   naoExisteProdutos:boolean = true;
 
 
-  constructor(private ApiService:ApiService, private endPoint:UtilsService,private router: Router, private route:ActivatedRoute) { }
+  constructor(private ApiService:ApiService, private endPoint:UtilsService,private router: Router, private route:ActivatedRoute, private login:LoginService) { }
 
   ngOnInit() {
-  
+
    
-   let linha =  JSON.parse(sessionStorage.getItem('linha')); 
-   console.log("Codigo Linha === " , linha);
+   let linha =  JSON.parse(sessionStorage.getItem('linha'));    
     
    this.ApiService.getLinhaById(linha)
    .subscribe((data:any)=>{
@@ -47,15 +48,16 @@ export class ProdutoComponent implements OnInit {
    })
    
    this.getProdByIdLinha();
+   this.mostraVoltar();
   }
   
   getProdByIdLinha(){
   let linha =  JSON.parse(sessionStorage.getItem('linha')); 
 
    this.ApiService.getProdByIdLinha(linha).subscribe((dataProd:any)=>{
-     this.produtos = dataProd.result; 
 
-      console.log("Produtos ==== ",this.produtos);
+     this.produtos = dataProd.result;     
+     
       
       if(this.produtos == "" || this.produtos == null){
         this.existeprodutos = true;
@@ -81,7 +83,10 @@ export class ProdutoComponent implements OnInit {
       this.ApiService.getUrlBiometria(param).subscribe(dataU =>{
             let vetor = dataD.result;   
         
-            this.usuario = vetor[dataU.indice];     
+            this.usuario = vetor[dataU.indice]; 
+            
+            this.mostrarVoltar = true;  
+            this.ApiService.enviarMostrarVoltar(this.mostrarVoltar);
              
             if(!this.usuario){
               alert("Usuário não encontrado")
@@ -126,17 +131,24 @@ export class ProdutoComponent implements OnInit {
 
   }
 
-  getProd(produto:any,qtd:any){   
-    
-    console.log("Cod_produto======",produto);
-    console.log("quantidade ==== ",qtd);
-    
+  getProd(produto:any,qtd:any){  
+    this.mostrarVoltar = true;  
+    this.ApiService.enviarMostrarVoltar(this.mostrarVoltar);
+
     
     sessionStorage.setItem('produto', JSON.stringify(produto)); 
     sessionStorage.setItem('qtd', JSON.stringify(qtd));        
       
     this.router.navigate(['/atividade']);	
   }
+
+
+mostraVoltar(){
+  this.mostrarVoltar = false;
+  this.ApiService.enviarMostrarVoltar(this.mostrarVoltar)
+
+
+}
 
   
 

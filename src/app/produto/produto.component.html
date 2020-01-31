@@ -3,6 +3,9 @@
      .alignleft {
        float: left;
       }
+      .card{
+        border-radius: 10px 10px;
+      }
     </style>
 
     <div class="container-full">		
@@ -16,7 +19,7 @@
                                 <i class="fa fa-cog fa-xs"></i> Desassociar 
                             </button>
                         </form>                
-                        <form action="menu_config_produto.php" id="form-menu-config-produto" style ='float: left; padding: 5px;'>
+                        <form action="" id="form-menu-config-produto" style ='float: left; padding: 5px;'>
                         <!-- <input type="hidden" name="config_user" id="config_user"> -->
                         
                         <button type="button" class="btn btn-large btn-warning bt-config" (click)='ProdutoConfig()'>
@@ -26,7 +29,8 @@
                 </div>
             </div>
             <br>
-            <div class="row" *ngIf="!existeprodutos">                
+
+            <div class="row" *ngIf="!existeprodutos" style=" padding: 25px 50px; ">                
                     <div class="col-sm-12 col-lg-3 py-2" *ngFor="let produto of produtos" value='produto.cod_produto' name="produto" (click)='getProd(produto.cod_produto,produto.qtd_produto)'>
                             <div class="card h-100">                              
                               <div class="card-body">

@@ -26,10 +26,11 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
   qtd:any;
   PtConfig:any;
   postos:any;
+  nr_codigo_produto:any;
   private codfun:any;
   private usuario:any;
   ptDAO:any;
-  classeVermelha:any;
+  classeVerde:any;
   classeAzul:any;
   private linha:any = [];
   private vazioPreenchido:any = [];
@@ -61,8 +62,10 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
     let produto =  JSON.parse(sessionStorage.getItem('produto')); 
     
      this.apiService.getProdById(produto).subscribe((dataProduto:any)=>{
-        this.produto = dataProduto.result;     
+        this.produto = dataProduto.result;         
+           
         this.prod = this.produto[0].nm_desc_produto;
+        this.nr_codigo_produto = this.produto[0].nr_codigo_produto;
         
      })
     
@@ -96,8 +99,10 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
     let arrRetorno = Array();
     try{
       this.ptDAO = this.apiService.getCdtMatrizAtividade(idatividade).subscribe((dataAtiv:any)=>{
-        let atvs = dataAtiv.result;
-          if(atvs > 0){
+        let matrizAtv = dataAtiv.result;
+       
+          
+          if(matrizAtv > 0){
 
             while (row = dataAtiv.result){
               arrRetorno =  Array(
@@ -122,7 +127,12 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
     let produto =  JSON.parse(sessionStorage.getItem('produto')); 
 
           this.apiService.getAtividades(idProdConfig).subscribe((dataAtiv:any)=>{
-            this.atividades = dataAtiv.result; 
+            this.atividades = dataAtiv.result;   
+         
+
+            for(let i = 0; i < this.atividades.length; i++){
+              this.fnMatrizAtividade(this.atividades[i].codigo);
+            }
             
             let qtdLinha = this.atividades.length;
             let loop =  qtdLinha > 4 ? 4 : qtdLinha ;
@@ -162,17 +172,8 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
                     this.vazioPreenchido = dataVazioPreenchido.result;
               
                     this.atividades[idx].vazio = this.vazioPreenchido[0].vazio;
-                    this.atividades[idx].preenchido = this.vazioPreenchido[0].preenchido; 
-
-                    if( this.vazioPreenchido[0].vazio == 0){
-                     this.classeVermelha = "vermelho";
-                     console.log(this.classeVermelha);
-                     
-                      
-                    }else {
-                      this.classeVermelha = "Azul"
-                      console.log(this.classeVermelha);
-                    }
+                    this.atividades[idx].preenchido = this.vazioPreenchido[0].preenchido;                         
+                    
       
             })
 
@@ -194,7 +195,8 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
                 
                       this.apiService.getPostoByIdProdIdAtivIdLinha(atv,this.PtConfig[0].codigo,linha).subscribe((dataPosto:any)=>{     
                   
-                              this.postos = dataPosto.result;   
+                              this.postos = dataPosto.result;                            
+                              
 
                               if(atividade == 48 || atividade == 68){
 
@@ -204,16 +206,17 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
                               }else{
 
                                 this.router.navigate(['/posto-trabalho']);
-
+                               
+                                this.sendInfo(atividade);   
                               }
-                  
+                         
                       }) 
         
                 }) 
         
    }
 
-   desassociar(){
+   desassociarPosto(){
 
     this.apiService.getUsersDigitais().subscribe((dataD:any)=>{      
 
@@ -222,17 +225,38 @@ export class ProdutoConfigAtividadeComponent implements OnInit {
       this.apiService.getUrlBiometria(param).subscribe(dataU =>{
             let vetor = dataD.result;   
         
-            this.usuario = vetor[dataU.indice];     
-            this.codfun =  this.usuario.codfun;
+            this.usuario = vetor[dataU.indice];           
             
-            console.log("usuario ==",this.usuario);
+            if(this.usuario == undefined){
+              
+              alert("Usuário não encontrado");
+            
+            }else{
+              this.router.navigate(['/finalizar-posto-automatico']);
+            }
             
             
-           
+          
 
       })             
     });
     
    }
+
+   sendInfo(atividade){
+		var info = {
+			produto:  {produto : this.prod,nr_codigo_produto:this.nr_codigo_produto},
+			qtd: this.qtd,
+			linha: this.linha[0].linha,
+			atividade: atividade,
+			tipo:0,
+			mostrar:true
+		}
+
+		this.apiService.enviarInfo(info)
+
+		
+	}
+
 
 }

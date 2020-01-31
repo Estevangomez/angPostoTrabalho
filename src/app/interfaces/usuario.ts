@@ -6,5 +6,6 @@ export class Usuario {
     status: number;
     digital:string;
     drt:string;
-    setor:string;  
+    setor:string;
+    engn:boolean = false;  
 }

@@ -9,11 +9,11 @@ import { ProdutoRoutingModule } from './produto.routing.mudule';
 
 
 
+
 @NgModule({
   declarations: [
     ProdutoComponent,    
-    ProdutoListarComponent,
-    
+    ProdutoListarComponent    
     
   ],
   exports:[ProdutoComponent],

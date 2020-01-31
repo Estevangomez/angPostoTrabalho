@@ -1,4 +1,4 @@
-import { TreinarColaboradorComponent } from './treinar-colaborador/treinar-colaborador.component';
+import { TreinarLiderComponent } from './treinar-lider/treinar-lider.component';
 
 import { EscolherAtividadeRoutingModule } from './escolher-produto.routing.module';
 import { EscolherAtividadeComponent } from './escolher-atividade.component';
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 
 
 @NgModule({
-  declarations: [EscolherAtividadeComponent,TreinarColaboradorComponent],
+  declarations: [EscolherAtividadeComponent,TreinarLiderComponent],
   imports: [
     CommonModule,
     EscolherAtividadeRoutingModule

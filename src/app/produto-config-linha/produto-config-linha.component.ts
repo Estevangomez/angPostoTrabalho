@@ -1,5 +1,8 @@
+import { LoginComponent } from './../login/login.component';
+import { Usuario } from './../interfaces/usuario';
 import { ProdutoConfigLinhaDia } from './../interfaces/produtoConfigLinhaDia';
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Linha } from '../interfaces/linha';
 import { ApiService } from '../providers/posto-trabalho.service';
 import {FormControl, FormGroup, Validators,FormBuilder } from "@angular/forms";
@@ -15,14 +18,16 @@ export class ProdutoConfigLinhaComponent implements OnInit {
   private produtos = [];
   private produtoConf:any;
   private ProdLinhConfDia;
+  private usuario:Usuario
   private qtdProd:any = [];
+  getLinha = [];
   linha:FormControl = new FormControl();
   produto:FormControl = new FormControl(); 
   status:FormControl= new FormControl(); 
   qtd:FormControl= new FormControl(); 
 
 
-  constructor(private apiService:ApiService) { }
+  constructor(private apiService:ApiService, private router:Router) { }
 
   ngOnInit() {
     this. produtoForm = new FormGroup({   
@@ -37,7 +42,9 @@ export class ProdutoConfigLinhaComponent implements OnInit {
   
     this.apiService.getLinhaById(linhha)
     .subscribe((data:any)=>{
-    this.linha = data.result;   
+    this.linha = data.result;  
+    
+    this.getLinha = this.linha[0].linha
       
     })
 
@@ -50,8 +57,9 @@ export class ProdutoConfigLinhaComponent implements OnInit {
     let linhha =  JSON.parse(sessionStorage.getItem('linha')); 
     this.apiService.getProdByIdFamilia(linhha,family)
     .subscribe((data:any)=>{
-      this.produtos = data.result;     
-      console.log(this.produtos);
+      this.produtos = data.result;   
+      console.log("=========", this.produtos);
+         
        
     })    
   }
@@ -61,38 +69,71 @@ export class ProdutoConfigLinhaComponent implements OnInit {
    let status=  this.produtoForm.controls['status'].value;
    let qtd=  this.produtoForm.controls['qtd'].value;
    let linha =  JSON.parse(sessionStorage.getItem('linha')); 
-   let codfun =  JSON.parse(sessionStorage.getItem('codfun'));    
+   let codfun =  JSON.parse(sessionStorage.getItem('codfun')); 
+   
+  
+   
+    this.apiService.getPtConfig(prod,qtd).subscribe((dtPtConfig:any)=>{
 
-    this.apiService.getProdByParams(prod,linha,status)
-    .subscribe((data:any)=>{
-      this.produtos = data.result;    
-      if(this.produtos){ 
+      let prod_config = dtPtConfig.result;     
+     
+      
+      this.apiService.getPtConfigByCodPtByIdlinha(prod,linha).subscribe((dtptConfig:any)=>{
 
-            console.log("Prod ==",prod,"status===",status,"linhha ===",linha, "qtd===",qtd);
+        let consultaSeExiste = dtptConfig.result;    
+        
+        
+        if(consultaSeExiste == ""){
 
-            this.ProdLinhConfDia = {
-              pcld_ativo : status,
-              pcld_linh_id : linha,
-              pcld_prco_id : prod,
-              
-             
-            } 
-             this.apiService.createProdConfigLinhDia(this.ProdLinhConfDia).subscribe((dataP:any)=>{  
-              console.log(dataP); 
-           })
-      
-      }
-      
-      
-    })  
+          this.ProdLinhConfDia = {
+            pcld_ativo : status,
+            pcld_linh_id : linha,
+            pcld_prco_id : prod,
+            codfun:codfun
+            
+           
+          }     
+          
+          
+           this.apiService.createProdConfigLinhDia(this.ProdLinhConfDia).subscribe((dataP:any)=>{      
+           
+            
+           if(dataP){
+
+             alert("Produto Adicionado !");
+
+             this.router.navigate(['/produto']);	
+    
+           }else{
+
+             alert("Erro ao adicionar produto !");
+
+           }
+         })    
+
+        }else{
+   
+          alert('O produto já está adicionado a essa linha, tente outro produto!');
+
+          this.router.navigate(['/produto']);	
+   
+        }
+        
+      }) 
+
+
+    })
+
+  
+    
    
   }
 
 
-  getQtdByIdProd(e:any){
+  getQtdByIdProd(e:any,produto){
     this.apiService.getQtdByIdProd(e.target.value).subscribe((dataQtd:any)=>{
        this.qtdProd = dataQtd.result;
-       console.log(e.target.value);
+       console.log("=================",e.target.value);
        
        console.log(this.qtdProd);
        

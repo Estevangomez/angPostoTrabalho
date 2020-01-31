@@ -11,19 +11,16 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'posto-trabalho';
 
-  mostrarMenu:boolean = false;
+  mostrarMenu:boolean = false;  
 
   constructor(private loginService:LoginService){
-
+  
   }
 
-  ngOnInit(){
-    this.loginService.mostrarMenuEmitter.subscribe((dataMenu)=>{
-        mostrar => this.mostrarMenu = dataMenu;
-     
-     
-      
-    });
+  ngOnInit(){    
+
+  
+    
   }
 
 

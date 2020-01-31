@@ -16,6 +16,7 @@ const APP_ROUTES:Routes = [
     {path:'escolher-produto',loadChildren: () => import('./escolher-produto/escolher-produto.module').then( mod => mod.EscolherProdutoModule )},
     {path:'escolher-atividade',loadChildren: () => import('./escolher-atividade/escolher-atividade.module').then( mod => mod.EscolherAtividadeModule )},
     {path:'escolher-tipo',loadChildren: () => import('./escolher-tipo-treinar-colaborador/escolher-tipo-treinar-colaborador.module').then( mod => mod.EscolherTipoTreinarColaboradorModule )},
+    {path:'escolher-PostoTrabalhoTipoLider',loadChildren: () => import('./escolher-tipo-treinar-lider/escolher-tipo-treinar-lider.module').then( mod => mod.EscolherTipoTreinarLiderModule )},
    
    
     {path:'atividade',component:ProdutoConfigAtividadeComponent},

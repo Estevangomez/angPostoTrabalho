@@ -28,7 +28,7 @@
     "@progress/kendo-angular-l10n": "^2.0.1",
     "@progress/kendo-angular-popup": "^3.0.4",
     "@types/jquery": "^3.3.31",
-    "@types/select2": "^4.0.44",
+    "@types/select2": "^4.0.48",
     "@types/socket.io-client": "^1.4.32",
     "classlist.js": "^1.1.20150312",
     "jquery": "^3.4.1",

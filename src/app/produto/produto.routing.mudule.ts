@@ -9,6 +9,7 @@ import { NgModule } from '@angular/core';
 const produtoRoutes = [
     {path:'',component:ProdutoComponent},
     {path:'produto/:id',component:ProdutoComponent},  
+  
    // {path:'configurar-produto',component:ProdutoConfigComponent},
   
 ];

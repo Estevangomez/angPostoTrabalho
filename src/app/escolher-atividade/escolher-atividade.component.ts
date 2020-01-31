@@ -19,6 +19,7 @@ export class EscolherAtividadeComponent implements OnInit {
   private produto:any;
   private prod:any;
   private produtos:any = [];
+  private nr_codigo_produto:any;
   private linha:any = [];
   private vazioPreenchido:any = [];
   currentDate = new Date();
@@ -45,6 +46,7 @@ export class EscolherAtividadeComponent implements OnInit {
      this.apiService.getProdById(produto).subscribe((dataProduto:any)=>{
         this.produto = dataProduto.result;     
         this.prod = this.produto[0].nm_desc_produto;
+        this.nr_codigo_produto = this.produto[0].nr_codigo_produto;
         
      })
     
@@ -131,10 +133,12 @@ export class EscolherAtividadeComponent implements OnInit {
                                 })
 
                               }else{
-
+                                this.sendInfo(atividade);
                                 this.router.navigate(['posto-trabalho/treinamentoColaborador']);		
 
                               }
+
+                           
                   
                       }) 
         
@@ -145,5 +149,20 @@ export class EscolherAtividadeComponent implements OnInit {
   
    
   }
+
+  sendInfo(atividade){
+		var info = {
+      produto:  {produto : this.prod,nr_codigo_produto:this.nr_codigo_produto},
+			qtd: this.qtd,
+			linha: this.linha[0].linha,
+      atividade: atividade,
+      tipo:0,
+			mostrar:true
+		}
+
+		this.apiService.enviarInfo(info)
+
+		
+	}
  
 }

@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PostoTrabalhoModule } from './posto-trabalho/posto-trabalho.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgSelect2Module } from 'ng-select2';
 
 
 
@@ -24,9 +25,6 @@ import { AppComponent } from './app.component';
 import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
-
-
 import { PostoTrabalhoEquipamentoComponent } from './posto-trabalho-equipamento/posto-trabalho-equipamento.component';
 import { PostoTipoArquivoComponent } from './posto-tipo-arquivo/posto-tipo-arquivo.component';
 import { PostoSituacaoFuncComponent } from './posto-situacao-func/posto-situacao-func.component';
@@ -39,12 +37,7 @@ import { ProdutoConfigAtividadeComponent } from './produto-config-atividade/prod
 import { ProdutoConfigHistComponent } from './produto-config-hist/produto-config-hist.component';
 import { SituacaoPostoComponent } from './situacao-posto/situacao-posto.component';
 import { NavbarComponent } from './navbar/navbar.component';
-
 import { AssociarProdutoALinhaComponent } from './associar-produto-a-linha/associar-produto-a-linha.component';
-
-
-
-
 
 
 
@@ -63,11 +56,8 @@ import { AssociarProdutoALinhaComponent } from './associar-produto-a-linha/assoc
     ProdutoConfigHistComponent,   
     SituacaoPostoComponent,    
     NavbarComponent, 
-    AssociarProdutoALinhaComponent,
-    
-    
-   
-    
+    AssociarProdutoALinhaComponent
+  
   ],
   imports: [
     BrowserModule,      
@@ -87,10 +77,7 @@ import { AssociarProdutoALinhaComponent } from './associar-produto-a-linha/assoc
     EscolherTipoTreinarColaboradorModule,
     NgSelectModule,
     BrowserAnimationsModule,
-
- 
-    
-    
+    NgSelect2Module   
     
   ],
   providers: [

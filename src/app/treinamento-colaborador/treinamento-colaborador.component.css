@@ -22,5 +22,9 @@ border-radius: .2rem;
     color: white !important;
     background-color: green !important;
 }
-
-
+.modal-backdrop{
+    opacity:0; transition:opacity .2s;
+  }
+  .modal-backdrop.in{
+    opacity:.7;
+  }

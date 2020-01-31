@@ -85,9 +85,7 @@ export class FormLoginComponent implements OnInit {
           
           this.usuario = vetor[dataU.indice];
           this.linha = this.loginForm.controls['linha'].value;
-          this.familia =  this.loginForm.controls['familia'].value;  
-
-          console.log("Digital == ", this.usuario);
+          this.familia =  this.loginForm.controls['familia'].value;        
 
           this.login.logar(this.usuario,this.linha,this.familia);
           
@@ -111,15 +109,19 @@ export class FormLoginComponent implements OnInit {
     this.apiService.getFamilia()
     .subscribe((data:any)=>{
       this.familias = data.result;  
+      console.log("Familias ========== " , this.familias);
+      
       
     }) 
     
   }
   /********************************************** */
-  getLinha(e:any){ 
+  getLinha(e:any,empresa:any){     
     this.apiService.getLinhaByIdEmpresa(e.target.value).subscribe((
       data:any) => {  
-        this.linhas = data.result
+        this.linhas = data.result;
+        console.log("Linhas ====== " , this.linhas);
+        
         
       }
       );
@@ -128,26 +130,12 @@ export class FormLoginComponent implements OnInit {
     
     getEmpresa(){
       
-      this.empresas = [
-        {
-          id: 0,
-          empresa:"Selecione uma Empresa"
-        },
-        {
-          id: 1,
-          empresa:"Digiboard"
-        }
-      ]
-      this.loginForm.controls['empresa'].setValue(this.empresas[0].id);
-      
-      
-      /*  this.apiService.getFamilia()
-      .subscribe((data:any)=>{
-        this.familia = data.result;   
-        console.log(this.familia);
-        
-        
-      })     */
+      this.apiService.getEmpresas().subscribe((dtEmpresas:any)=>{
+        this.empresas = dtEmpresas.result;       
+       
+    
+      })     
+
     }
     
     
